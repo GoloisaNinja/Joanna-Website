@@ -1,22 +1,65 @@
 // FORMSPREE DEFAULT CODE TO SUBMIT FORM THROUGH THEIR SERVER
 
-let form = document.getElementById("form-collector");
-    
+let form = document.getElementById('form-collector');
+
 async function handleSubmit(event) {
-  event.preventDefault();
-  var status = document.getElementById("status");
-  var data = new FormData(event.target);
-  fetch(event.target.action, {
-    method: form.method,
-    body: data,
-    headers: {
-        'Accept': 'application/json'
-    }
-  }).then(response => {
-    status.innerHTML = "Thank you for reaching out. Your request was sent successfully.";
-    form.reset()
-  }).catch(error => {
-    status.innerHTML = "Oops! There was a problem submitting your form."
-  });
+	event.preventDefault();
+	var status = document.getElementById('status');
+	var data = new FormData(event.target);
+	fetch(event.target.action, {
+		method: form.method,
+		body: data,
+		headers: {
+			Accept: 'application/json',
+		},
+	})
+		.then((response) => {
+			status.innerHTML =
+				'Thank you for reaching out. Your request was sent successfully.';
+			form.reset();
+		})
+		.catch((error) => {
+			status.innerHTML = 'Oops! There was a problem submitting your form.';
+		});
 }
-form.addEventListener("submit", handleSubmit)
+form.addEventListener('submit', handleSubmit);
+
+// SCROLL BTN LOGIC & OBSERVATION INTERSECTION
+
+const scrollBtn = document.getElementById('scrollBtn');
+
+scrollBtn.addEventListener('click', (e) => {
+	const y = 0;
+	window.scrollTo({ top: y, behavior: 'smooth' });
+});
+
+const scrollBtnHide = document.getElementById('scrollBtnHide');
+const scrollBtnShow = document.getElementById('scrollBtnShow');
+
+const returnCallback = (elem, methodType, classAsString) => {
+	return function (entries) {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				if (methodType === 'add') {
+					elem.classList.add(classAsString);
+				} else {
+					elem.classList.remove(classAsString);
+				}
+			}
+		});
+	};
+};
+
+const createObserverFunction = (elem, callback, options) => {
+	let observer = new IntersectionObserver(callback, options);
+	observer.observe(elem);
+	return observer;
+};
+createObserverFunction(
+	scrollBtnShow,
+	returnCallback(scrollBtn, 'add', 'showBtn')
+);
+createObserverFunction(
+	scrollBtnHide,
+	returnCallback(scrollBtn, 'remove', 'showBtn')
+);

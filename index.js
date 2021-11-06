@@ -63,3 +63,20 @@ createObserverFunction(
 	scrollBtnHide,
 	returnCallback(scrollBtn, 'remove', 'showBtn')
 );
+
+// SMOOTH SCROLL NAV
+
+const navAboutBtn = document.getElementById('nav-about-me');
+const navWorkBtn = document.getElementById('nav-work');
+const navContactBtn = document.getElementById('nav-contact');
+
+const scrollToElementById = (e) => {
+	const id = e.target.id.substring(4);
+	const target = document.getElementById(id);
+	const y = target.getBoundingClientRect().top;
+	window.scrollTo({ top: y, behavior: 'smooth' });
+};
+
+navAboutBtn.addEventListener('click', (e) => scrollToElementById(e));
+navWorkBtn.addEventListener('click', (e) => scrollToElementById(e));
+navContactBtn.addEventListener('click', (e) => scrollToElementById(e));
